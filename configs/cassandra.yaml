@@ -1,0 +1,76 @@
+# Cassandra Cluster Configuration
+# This file contains the basic configuration for a multi-node Cassandra cluster
+
+# Cluster and Node Configuration
+cluster_name: 'CassandraDemoCluster'
+num_tokens: 256
+initial_token:
+hinted_handoff_enabled: true
+max_hints_window_in_ms: 10800000
+hinted_handoff_throttle_in_kb: 1024
+max_hints_delivery_threads: 2
+
+# Data Storage Configuration
+data_file_directories:
+    - /var/lib/cassandra/data
+commitlog_directory: /var/lib/cassandra/commitlog
+cdc_enabled: false
+cdc_raw_directory: /var/lib/cassandra/cdc_raw
+
+# Memory Configuration
+memtable_allocation_type: heap_buffers
+memtable_cleanup_threshold: 0.11
+memtable_flush_writers: 1
+memtable_heap_space_in_mb: 2048
+memtable_offheap_space_in_mb: 0
+
+# Network Configuration
+listen_address: localhost
+rpc_address: localhost
+rpc_port: 9160
+rpc_keepalive: true
+rpc_server_type: sync
+thrift_framed_transport_size_in_mb: 15
+thrift_max_message_length_in_mb: 16
+
+# Security Configuration
+authenticator: AllowAllAuthenticator
+authorizer: AllowAllAuthorizer
+role_manager: CassandraRoleManager
+roles_validity_in_ms: 2000
+permissions_validity_in_ms: 2000
+partitioner: org.apache.cassandra.dht.Murmur3Partitioner
+
+# Snitch Configuration
+endpoint_snitch: SimpleSnitch
+dynamic_snitch_update_interval_in_ms: 100
+dynamic_snitch_reset_interval_in_ms: 600000
+dynamic_snitch_badness_threshold: 0.1
+
+# Request Routing
+request_scheduler: org.apache.cassandra.scheduler.NoScheduler
+server_encryption_options:
+    internode_encryption: none
+    keystore: conf/.keystore
+    keystore_password: cassandra
+    truststore: conf/.truststore
+    truststore_password: cassandra
+    require_client_auth: false
+
+# Client Encryption
+client_encryption_options:
+    enabled: false
+    keystore: conf/.keystore
+    keystore_password: cassandra
+
+# Performance Tuning
+concurrent_reads: 32
+concurrent_writes: 32
+concurrent_counter_writes: 32
+concurrent_materialized_view_writes: 32
+concurrent_compactors: 1
+compaction_throughput_mb_per_sec: 16
+compaction_large_partition_warning_threshold_mb: 100
+
+# Logging
+logback_conf: conf/logback.xml
